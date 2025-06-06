@@ -13,7 +13,7 @@ BEGIN {
             "echo 1 > /proc/sys/kernel/unprivileged_userns_clone 2> /dev/null");
     }
     if ( system("$basedir/userns_child_exec -t -U > /dev/null 2>&1") != 0 ) {
-       plan skip_all => "CLONE_NEWUSER not supported";
+        plan skip_all => "CLONE_NEWUSER not supported";
     }
     else {
         $test_count = 2;
@@ -46,18 +46,19 @@ $result = system(
 ok($result);
 
 if ($test_checkpoint) {
+
     # Verify that test_cap2_userns_t can use cap_checkpoint_restore
 
     $result = system(
-        "$basedir/userns_child_exec -p -U -M '0 0 1' -G '0 0 1' -- runcon -t test_cap2_userns_t -- sh -c 'echo 1000 > /proc/sys/kernel/ns_last_pid'"
-        );
+"$basedir/userns_child_exec -p -U -M '0 0 1' -G '0 0 1' -- runcon -t test_cap2_userns_t -- sh -c 'echo 1000 > /proc/sys/kernel/ns_last_pid'"
+    );
     ok( $result eq 0 );
 
     # Verify that test_no_cap_userns_t cannot use cap_checkpoint_restore
 
     $result = system(
-        "$basedir/userns_child_exec -p -U -M '0 0 1' -G '0 0 1' -- runcon -t test_no_cap2_userns_t -- sh -c 'echo 1000 > /proc/sys/kernel/ns_last_pid'"
-        );
+"$basedir/userns_child_exec -p -U -M '0 0 1' -G '0 0 1' -- runcon -t test_no_cap2_userns_t -- sh -c 'echo 1000 > /proc/sys/kernel/ns_last_pid'"
+    );
     ok($result);
 }
 
